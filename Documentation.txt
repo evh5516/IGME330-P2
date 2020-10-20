@@ -1,0 +1,16 @@
+DOCUMENTATION
+
+10-19-20
+- Began initial work
+- Set up varying tracks that shuffles an array of songs depending on selected mood and begins playing.
+    - Needs to continue playing through list after first song**
+    - Fix some songs that aren't loading properly
+- Color chaning to reflect mood **
+- Adding and removing controls to make more fitting theme
+
+10-20-20
+- Working on changing visualizer to be more unique and interesting.
+    - Struggling to get bars around circle to show up at changing lengths
+    - Varying colors as well, possibly dependent on mood
+- Added time bar and changed up controls. 
+- Working on track name displayer

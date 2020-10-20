@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<title>Audio Visualizer Project</title>
+	<link href="styles/my-styles.css" type="text/css" rel="stylesheet" />
+	<script src="./src/loader.js" type="module"></script>
+</head>
+<body>
+<main>
+    <h1>Audio Visualizer Project</h1>
+	<canvas width="800" height="600"></canvas>
+	<div id="controls">
+		<section>
+		    <audio controls src="" allow="autoplay"></audio>
+			<button id="fsButton">Full Screen</button>
+		
+			<label>Mood: 
+				<select id="moodSelect">
+				    <option value="none" selected>---</option>
+					<option value="calm">Calm</option>
+					<option value="vibe">Vibe</option>
+					<option value="sad">Sad</option>
+				</select>
+			</label>
+		</section>
+		<section>
+          <!-- we'll use this 4th checkbox soon! -->
+          <span><input type="checkbox" id="noiseCB"><label for="noiseCB">Show Noise</label></span>
+          <span><input type="checkbox" id="invertCB"><label for="invertCB">Invert Colors</label></span>
+          <span><input type="checkbox" id="embossCB"><label for="embossCB">Show Emboss</label></span>
+        </section>
+        
+        <section>
+            Track: <div id='trackName'>---</div>
+        </section>
+	</div>
+</main>
+</body>
+</html>
