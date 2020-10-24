@@ -17,22 +17,29 @@
 		
 			<label>Mood: 
 				<select id="moodSelect">
-				    <option value="none" selected>---</option>
-					<option value="calm">Calm</option>
+					<option value="calm" selected>Calm</option>
 					<option value="vibe">Vibe</option>
 					<option value="sad">Sad</option>
 				</select>
 			</label>
 		</section>
 		<section>
-          <!-- we'll use this 4th checkbox soon! -->
+          <span><input type="radio" id="showCircle" name="visualization" value="circle" checked><label for="showCircle">Circle</label></span>
+          <span><input type="radio" id="showSnowflake" name="visualization" value="snowflake"><label for="showSnowflake">Snowflake</label></span>
+          <span><input type="radio" id="showBar" name="visualization" value="bar"><label for="showBar">Bar</label></span>
+          <span><input type="checkbox" id="waveformCB" checked><label for="waveformCB" >Show Waveform</label></span>
           <span><input type="checkbox" id="noiseCB"><label for="noiseCB">Show Noise</label></span>
-          <span><input type="checkbox" id="invertCB"><label for="invertCB">Invert Colors</label></span>
-          <span><input type="checkbox" id="embossCB"><label for="embossCB">Show Emboss</label></span>
         </section>
         
         <section>
-            Track: <div id='trackName'>---</div>
+            <span><input type="checkbox" id="trackCB" checked><label for="trackCB">Show Track</label></span>
+            <div id='trackName'>---</div>
+        </section>
+        
+        <section>
+            <span><input type="range" min='0' max='255' value='10' class='slider' id='redSlider'><label for='redSlider'>Red</label></span>
+            <span><input type="range" min='0' max='255' value='200' class='slider' id='greenSlider'><label for='greenSlider'>Green</label></span>
+            <span><input type="range" min='0' max='255' value='60' class='slider' id='blueSlider'><label for='blueSlider'>Blue</label></span>
         </section>
 	</div>
 </main>

@@ -46,4 +46,34 @@ const shuffle = (a) => {
     return a;
 }
 
-export {makeColor, getRandomColor, getLinearGradient, goFullscreen, shuffle};
+const songTracker= (song, titles={}) =>{
+    if (song == 'escape - Imaginary Labyrinth - 01 Imaginary Labyrinth.mp3'){
+        return titles.imaginaryLabrinth;
+    }
+    if (song == 'escape - Imaginary Labyrinth - 02 Masks.mp3'){
+        return titles.masks;
+    }
+    if (song == 'escape - Imaginary Labyrinth - 03 Morpheus.mp3'){
+        return titles.morpheus;
+    }
+    if (song == 'escape - Imaginary Labyrinth - 04 Ikelos.mp3'){
+        return titles.ikelos;
+    }
+    if (song == 'scape - Imaginary Labyrinth - 05 Gaea.mp3'){
+        return titles.gaea;
+    }
+    if (song == 'escape - Imaginary Labyrinth - 06 Lethe.mp3'){
+        return titles.lethe;
+    }
+    if (song == 'escape - Imaginary Labyrinth - 07 Acheron.mp3'){
+        return titles.archeron;
+    }
+    if (song == 'escape - Imaginary Labyrinth - 08 Ouranos.mp3'){
+        return titles.ouranos;
+    }
+    if (song == 'escape - Moving Forward.mp3'){
+        return titles.movingForward;
+    }
+}
+
+export {makeColor, getRandomColor, getLinearGradient, goFullscreen, shuffle, songTracker};

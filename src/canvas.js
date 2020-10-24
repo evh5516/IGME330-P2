@@ -28,10 +28,15 @@ function setupCanvas(canvasElement,analyserNodeRef){
 
 function draw(params={}){
   // 1 - populate the audioData array with the frequency data from the analyserNode
-	// notice these arrays are passed "by reference" 
-	analyserNode.getByteFrequencyData(audioData);
-	// OR
-	//analyserNode.getByteTimeDomainData(audioData); // waveform data
+    
+    if(params.showWaveform){
+        // notice these arrays are passed "by reference" 
+        analyserNode.getByteTimeDomainData(audioData); // waveform data
+    }
+    else{
+        // OR
+        analyserNode.getByteFrequencyData(audioData); // frequency data
+    }
 	
 	// 2 - draw background
     ctx.save();
@@ -44,17 +49,54 @@ function draw(params={}){
     if (params.showGradient){
         ctx.save();
         ctx.fillStyle = gradient;
-        ctx.globalAlpha = 0.3;
+        ctx.globalAlpha = params.backgroundAlpha;
         ctx.fillRect(0,0,canvasWidth,canvasHeight);
         ctx.restore();
     }
-    /*
-    if (params.showCircles && params.moodType != '---'){
+    
+    // SNOWFLAKE
+    if (params.showSnowflake){
         let radius = 150;
         let bars = 200;
+        let spacingNumber = 360/200;
         let centerX = canvasWidth/2;
         let centerY = canvasHeight/2;
-        //let frequencyArray = new Uint8Array(analyserNode.frequencyBinCount);
+        let frequencyArray = new Uint8Array(analyserNode.frequencyBinCount);
+        
+        ctx.save();
+        ctx.globalAlpha = 0.4;
+        
+        //ctx.beginPath();
+        //ctx.arc(centerX, centerY, radius, 0, 2*Math.PI);
+        //ctx.stroke();
+        
+        analyserNode.getByteFrequencyData(frequencyArray);
+        
+        for(let i = 0; i < bars; i++){
+            let rads = Math.PI * 2 / bars;
+            let barHeight = audioData[i]*(1.2);
+            let barWidth = 2;
+            
+            let x = centerX; //+ Math.cos(rads * spacingNumber) * (radius);
+            let y = centerY + Math.sin(rads * spacingNumber) * (radius);
+            //let xEnd = centerX + Math.cos(rads * i) * (radius + barHeight);
+            //let yEnd = centerY + Math.sin(rads * i) * (radius + barHeight);
+            
+            //let lineColor = "rgb(" + frequency + ", " + frequency +", "+205+")";
+            drawBar(x, y, barWidth, barHeight, i*spacingNumber, frequencyArray[i]);
+            
+            //console.log(audio.frequencyArray);
+        }
+        ctx.restore();
+    }
+    // CIRCLE
+    if (params.showCircles){
+        let radius = 100;
+        let bars = 200;
+        let spacingNumber = 360/bars;
+        let centerX = canvasWidth/2;
+        let centerY = canvasHeight/2;
+        let frequencyArray = new Uint8Array(analyserNode.frequencyBinCount);
         
         ctx.save();
         ctx.globalAlpha = 0.4;
@@ -63,33 +105,60 @@ function draw(params={}){
         ctx.arc(centerX, centerY, radius, 0, 2*Math.PI);
         ctx.stroke();
         
-        //analyserNode.getByteFrequencyData(frequencyArray);
+        analyserNode.getByteFrequencyData(frequencyArray);
         
         for(let i = 0; i < bars; i++){
             let rads = Math.PI * 2 / bars;
-            let barHeight = audioData[i]*0.7;
+            let barHeight = audioData[i]*(0.7);
             let barWidth = 2;
             
-            let x = centerX + Math.cos(rads * i) * (radius);
-            let y = centerY + Math.sin(rads * i) * (radius);
-            let xEnd = centerX + Math.cos(rads * i) * (radius + barHeight);
-            let yEnd = centerY + Math.sin(rads * i) * (radius + barHeight);
+            let x = centerX + Math.cos(degToRad(i*spacingNumber)) * radius;
+            let y = centerY + Math.sin(degToRad(i*spacingNumber)) * radius;
+            //let xEnd = centerX + Math.cos(rads * i) * (radius + barHeight);
+            //let yEnd = centerY + Math.sin(rads * i) * (radius + barHeight);
             
             //let lineColor = "rgb(" + frequency + ", " + frequency +", "+205+")";
-    
-            ctx.save();
-            ctx.strokeStyle = 'red';
-            ctx.lineWidth = barWidth;
-            ctx.beginPath();
-            ctx.moveTo(x,y);
-            ctx.moveTo(xEnd,yEnd);
-            ctx.stroke();
-            ctx.restore();
+            drawBar(x, y, barWidth, barHeight, i*spacingNumber, frequencyArray[i]);
+            
             //console.log(audio.frequencyArray);
         }
         ctx.restore();
-    }*/
+    }
     
+    if (params.showBar){
+        let bars = 200;
+        let barSpacing = 4;
+        let margin = 0;
+        let screenWidthForBars = canvasWidth - (bars * barSpacing) - margin * 2;
+        let barWidth = screenWidthForBars / bars;
+        let barHeight = 200;
+        let topSpacing = (canvasHeight/2) - (barHeight);
+        let frequencyArray = new Uint8Array(analyserNode.frequencyBinCount);
+        
+        analyserNode.getByteFrequencyData(frequencyArray);
+        
+        if (params.showWaveform){
+            topSpacing = (canvasHeight/2) - (barHeight);
+        }
+        else{
+            topSpacing = (canvasHeight)- (barHeight*2);
+        }
+        
+        ctx.save();
+        
+        // loop through the data and draw!
+        for(let i = 0; i < bars; i++){
+            //ctx.fillStyle = "rgb(" + frequencyArray[i] + ", " + frequencyArray[i] +", "+205+")";
+            //ctx.strokeStyle = "rgb(" + frequencyArray[i] + ", " + frequencyArray[i] +", "+205+")";
+            ctx.fillStyle = "rgb(" + params.redValue + ", " + params.greenValue +", "+ params.blueValue +")";
+            ctx.strokeStyle = "rgb(" + params.redValue + ", " + params.greenValue +", "+params.blueValue +")";
+            ctx.fillRect(margin + i * (barWidth + barSpacing), topSpacing + 256-audioData[i], barWidth, barHeight);
+            ctx.strokeRect(margin + i * (barWidth + barSpacing), topSpacing + 256-audioData[i], barWidth, barHeight);
+        }
+        ctx.restore();
+    }
+    
+    /*
 	// 5 - draw circles
     if(params.showCircles){
         let maxRadius = canvasHeight/3;
@@ -166,7 +235,7 @@ function draw(params={}){
             }
         }
         ctx.restore();
-    }
+    }*/
     // 6 - bitmap manipulation
 	// TODO: right now. we are looping though every pixel of the canvas (320,000 of them!), 
 	// regardless of whether or not we are applying a pixel effect
@@ -180,44 +249,33 @@ function draw(params={}){
     let data = imageData.data;
     let length = data.length;
     let width = imageData.width; // not using here
+    let frequencyArray = new Uint8Array(analyserNode.frequencyBinCount);
+        
+    analyserNode.getByteFrequencyData(frequencyArray);
 	// B) Iterate through each pixel, stepping 4 elements at a time (which is the RGBA for 1 pixel)
-    for (let i = 0; i < length; i+=4){
-		// C) randomly change every 20th pixel to red
+    for (let i = 0; i < length; i+=10){
+		// C) randomly change every 20th pixel
 	   if (params.showNoise && Math.random() < .05){
 			// data[i] is the red channel
 			// data[i+1] is the green channel
 			// data[i+2] is the blue channel
 			// data[i+3] is the alpha channel
-           if (params.showInvert){
-                let red = data[i], green = data[i+1], blue = data[i+2];
-               data[i] = 255 - red;     // set red value
-               data[i+1] = 255 - green; // set green value
-               data[i+2] = 255 - blue;  // set blue value
-               // data[i+3] is the alpha but we're leaving that alone
-           }
-           else{
-                data[i] = data[i+1] = data[i+2] = 0; // zero out the red and green and blue channels
-                data[i+1] = 150; 
-                data[i+2] = 150;
-           }
+          
+            data[i] = data[i+1] = data[i+2] = 0; // zero out the red and green and blue channels
+            data[i+1] = 150; 
+            data[i+2] = 220;
+           
 		} // end if
         
 	} // end for
-    if (params.showEmboss){
-        // note we are stepping through *each* sub-pixel
-        for (let i = 0; i < length; i++){
-            if (i%4 == 3) continue; // skip alpha channel
-            data[i] = 127 + 2*data[i] - data[i+4] - data[i + width*4]; 
-        }
-    }
 	
 	// D) copy image data back to canvas
     ctx.putImageData(imageData, 0, 0);
 }
 
-function drawBar(x1, y1, x2, y2, width, frequency){
-    let lineColor = "rgb(" + frequency + ", " + frequency +", "+205+")";
-    
+function drawBar(x, y, w, h, rads, frequency){
+    let lineColor = "rgb(" + frequency/2 + ", " + frequency*2 +", "+ frequency +")";
+    /*
     ctx.save();
     ctx.strokeStyle = 'red';
     ctx.lineWidth = width;
@@ -225,8 +283,19 @@ function drawBar(x1, y1, x2, y2, width, frequency){
     ctx.moveTo(x1,y1);
     ctx.moveTo(x2,y2);
     ctx.stroke();
+    ctx.restore();*/
+    
+    ctx.save();
+    ctx.translate(x, y);
+    ctx.rotate(degToRad(rads+90));
+    ctx.fillStyle = lineColor;
+    ctx.fillRect(-1*(w), -1*(h), w, h);
     ctx.restore();
     
+}
+
+function degToRad(deg){
+  return deg * Math.PI / 180;
 }
 
 export {setupCanvas,draw};
