@@ -49,7 +49,7 @@ function draw(params={}){
     if (params.showGradient){
         ctx.save();
         ctx.fillStyle = gradient;
-        ctx.globalAlpha = params.backgroundAlpha;
+        ctx.globalAlpha = 0.4;
         ctx.fillRect(0,0,canvasWidth,canvasHeight);
         ctx.restore();
     }
