@@ -37,15 +37,15 @@ const songID = {
 }*/
 
 const songTitle = {
-    imaginaryLabrinth   : 'Escape - Imaginary Labrinth',
-    masks               : 'Escape - Masks',
-    morpheus            : 'Escape - Morpheus',
-    ikelos              : 'Escape - Ikelos',
-    gaea                : 'Escape - Gaea',
-    lethe               : 'Escape - Lethe',
-    archeron            : 'Escape - Archeron',
-    ouranos             : 'Escape - Ouranos',
-    movingForward       : 'Escape - Moving Forward'
+    imaginaryLabrinth   : 'Imaginary Labrinth',
+    masks               : 'Masks',
+    morpheus            : 'Morpheus',
+    ikelos              : 'Ikelos',
+    gaea                : 'Gaea',
+    lethe               : 'Lethe',
+    archeron            : 'Archeron',
+    ouranos             : 'Ouranos',
+    movingForward       : 'Moving Forward'
 }
 
 
@@ -248,13 +248,16 @@ function setupUI(canvasElement){
         trackName.innerHTML = trackHolder;
     }
     
+    let artistName = document.querySelector('#artistName');
     // add .onchange event to <select>
     trackCB.onchange = e => {
         if (trackCB.checked){
             trackName.innerHTML = trackHolder;
+            artistName.innerHTML = 'Escape:';
         }
         else{
             trackName.innerHTML = "";
+            artistName.innerHTML = "";
         }
     };
     

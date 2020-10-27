@@ -38,6 +38,10 @@ DOCUMENTATION
 - Added checkbox toggle for Logarithmic Analyser
 - Added css styles.
 
+10-27-2020
+- Adjusted trackCB so fit text better
+- Few style adjustments
+
 Requirements:
 - Basic controls in the audio controller
 - Progress indicator on audio controller
