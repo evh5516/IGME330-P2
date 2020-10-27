@@ -1,31 +1,106 @@
 body {
-	background: #eeeeee;
-	font-family: tahoma, verdana, sans serif;
+	background: #1e1e1e;
+	font-family: "Lato";
+    color: #ffffff;
 }
 
 canvas {
-	margin-left: 1rem;
+    
+	margin-left: 300px;
+    margin-right: auto;
+    position: relative;
 	margin-top: 1rem;
 	margin-bottom: 1rem;
 	box-shadow: 4px 4px 8px rgba(0,0,0,0.5);
 	background: #fafafa;
 }
 
-#controls{
-  margin-left: 1rem;
+h1 {
+    text-align: center;
 }
 
-#volumeLabel{
-  margin-left: 1rem;
+.flex-container {
+    display: flex;
+    flex-wrap: nowrap;
+    box-shadow: 4px 4px 8px rgba(0,0,0,0.5);
+	background: #1e1e1e;
+    margin-left: 1rem;
+}
+
+.flex-container > div {
+    width: 800px;
+    margin-left: 1rem;
+}
+.flex-container > #mainInput {
+    box-shadow: none;
+    align-content: space-between;
+    flex-direction: column;
+    width: 300px;
+    margin-left: 50px;
+    margin-right: 25px;
+    margin-top: 50px;
+}
+.flex-container > #mood {
+    box-shadow: none;
+    align-content: space-between;
+    flex-direction: column;
+    width: 100px;
+    margin-right: 25px;
+    margin-top: 50px;
+}
+audio {
+    background-color: #1e1e1e;   
+}
+.flex-container > #radio {
+    box-shadow: none;
+    align-content: space-between;
+    flex-direction: column;
+    width: 100px;
+    margin-right: 25px;
+    margin-top: 50px;
+}
+.flex-container > #checkbox {
+    box-shadow: none;
+    align-content: space-between;
+    flex-direction: column;
+    margin-right: 25px;
+    margin-top: 50px;
+}
+.flex-container > #track {
+    box-shadow: none;
+    flex-wrap: nowrap;
+    flex-direction: column;
+    width: 150px;
+    margin-right: 25px;
+    margin-top: 50px;
+}
+.flex-container > #colors {
+    box-shadow: none;
+    display: flex;
+    flex-wrap: wrap;
+    width: 150px;
+}
+.flex-container > #bass {
+    box-shadow: none;
+    flex-wrap: nowrap;
+    flex-direction: column;
+    width: 150px;
+    margin-right: 25px;
+}
+#bassText {
+    margin-left: 50px;
+}
+#bassSlider {
+    -webkit-appearance: slider-vertical;
+    display: block;
+}
+#bassSlider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
 }
 
 section{
   margin-bottom: 1rem;
-}
-
-#playButton{
-  font-size: 1.2rem;
-  width: 6rem;
 }
 
 button[data-playing="yes"]:after{
@@ -39,4 +114,6 @@ button[data-playing="no"]:after{
 #fsButton{
   font-size: 1.2rem;
   width: 8rem;
+    border-radius: 12px;
+    margin-left: 90px;
 }

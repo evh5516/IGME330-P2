@@ -1,13 +1,11 @@
 DOCUMENTATION
 
-( ** means to do)
-
 10-19-2020
 - Began initial work
 - Set up varying tracks that shuffles an array of songs depending on selected mood and begins playing.
     - Needs to continue playing through list after first song**
     - Fix some songs that aren't loading properly
-- Color changing to reflect mood **
+- Color changing to reflect mood ?
 - Adding and removing controls to make more fitting theme
 
 10-20-2020
@@ -30,4 +28,40 @@ DOCUMENTATION
 - Added trackname display and fixed shuffle tracks
 - Added checkbox for toggling track name
 - Added sliders for background color (do nothing right now)
-- Added checkbox for additional effect -> noise (needs adjusting to be more interesting)
+- Added checkbox for additional effect -> noise? (needs adjusting to be more interesting)
+
+10-26-2020
+- Added bass slider audio effect
+- Fixed rgb sliders, they now update in real time as the slider moves
+- Changed bytefrequencydata to be logarithmic
+- Fixed autoplay and shuffling playlist to work properly
+- Added checkbox toggle for Logarithmic Analyser
+- Added css styles.
+
+Requirements:
+- Basic controls in the audio controller
+- Progress indicator on audio controller
+- Sliders for both the Bass tuner and Color changer
+- Checkboxes for waveform, logarithmic analyser, and track display
+- Radio buttons for changing the style of visualizer
+- Mood changer cycles through different playlists depending on what is selected
+- Frequency data is default view and waveform is a checkbox toggle
+- Bass adjuster for audio effect node which is manipulated with a slider
+
+Additional Tasks:
+- Logarithmic analyser toggle 
+
+What went right:
+- Visualizers work smoothly and look nice
+- Not overly complicated/confusing design
+- Cohearent design and functionality
+
+What went wrong:
+- Logarithmic analyser has a bit of grouping at the lower frequencies due to how obtaining the logs of the audio values works (explained well in the stackoverflow link below)
+
+Grade: 
+100%
+Reason - All requirements met. No issues with validation.  
+
+Resources:
+https://stackoverflow.com/questions/35799286/get-logarithmic-bytefrequencydata-from-audio

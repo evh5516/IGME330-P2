@@ -3,7 +3,7 @@ let audioCtx;
 
 // **These are "private" properties - these will NOT be visible outside of this module (i.e. file)**
 // 2 - WebAudio nodes that are part of our WebAudio audio routing graph
-let element, sourceNode, analyserNode, gainNode;
+let element, sourceNode, analyserNode, gainNode, biquadNode;
 
 // 3 - here we are faking an enumeration
 const DEFAULTS = Object.freeze({
@@ -41,6 +41,10 @@ function setupWebAudio(filePath){
     the third is 344Hz, and so on. Each bin contains a number between 0-255 representing 
     the amplitude of that frequency.
     */ 
+    
+    // creating a biquad node for bass
+    biquadNode = audioCtx.createBiquadFilter();
+    biquadNode.type = "lowshelf";
 
     // fft stands for Fast Fourier Transform
     analyserNode.ftfSize = DEFAULTS.numSamples;
@@ -50,7 +54,8 @@ function setupWebAudio(filePath){
     gainNode.gain.value = DEFAULTS.gain;
 
     // 8 - connect the nodes - we now have an audio graph
-    sourceNode.connect(analyserNode);
+    sourceNode.connect(biquadNode);
+    biquadNode.connect(analyserNode);
     analyserNode.connect(gainNode);
     gainNode.connect(audioCtx.destination);
 }
@@ -72,4 +77,4 @@ function setVolume(value){
     gainNode.gain.value = value;
 }
 
-export {audioCtx, setupWebAudio, playCurrentSound, pauseCurrentSound, loadSoundFile, setVolume, analyserNode};
+export {audioCtx, setupWebAudio, playCurrentSound, pauseCurrentSound, loadSoundFile, setVolume, analyserNode, biquadNode};

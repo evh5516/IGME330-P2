@@ -13,12 +13,12 @@ import * as canvas from './canvas.js';
 
 const drawParams = {
     moodType        : 'calm',
-    showGradient    : true,
+    showGradient    : false,
     showCircles     : true,
     showSnowflake   : false,
     showBar         : false,
     showWaveform    : true,
-    showNoise       : false,
+    showLog         : false,
     redValue        : 100,
     greenValue      : 20,
     blueValue       : 200
@@ -98,44 +98,89 @@ function setupUI(canvasElement){
     let trackHolder = utils.songTracker(calmTracks[0], songTitle);
     trackName.innerHTML = trackHolder;
     
+    let indexNum = 0;
     
     
     // D - hookup track <select>
     let moodSelect = document.querySelector('#moodSelect');
     
+    audioControls.onended = e => {
+        if (moodSelect.value == 'calm'){
+            if (indexNum == calmTracks.length-1){
+                indexNum = 0;
+            }
+            else{
+                indexNum++;
+            }
+            audioControls.src = 'media/calm/' + calmTracks[indexNum];
+            trackHolder = utils.songTracker(calmTracks[indexNum], songTitle);
+            if (trackCB.checked){
+                trackName.innerHTML = trackHolder;
+            }
+        }
+        if (moodSelect.value == 'vibe'){
+            if (indexNum == vibeTracks.length-1){
+                indexNum = 0;
+            }
+            else{
+                indexNum++;
+            }
+            audioControls.src = 'media/vibe/' + vibeTracks[indexNum];
+            trackHolder = utils.songTracker(vibeTracks[indexNum], songTitle);
+            if (trackCB.checked){
+                trackName.innerHTML = trackHolder;
+            }
+        }
+        if (moodSelect.value == 'sad'){
+            if (indexNum == sadTracks.length-1){
+                indexNum = 0;
+            }
+            else{
+                indexNum++;
+            }
+            audioControls.src = 'media/sad/' + sadTracks[indexNum];
+            trackHolder = utils.songTracker(vibeTracks[indexNum], songTitle);
+            if (trackCB.checked){
+                trackName.innerHTML = trackHolder;
+            }
+        }
+        audioControls.play();
+    }
+    
     // add .onchange event to <select>
     moodSelect.onchange = e => {
         drawParams.moodType = e.target.value;
         if (e.target.value == 'calm'){
+            
             calmTracks = utils.shuffle(calmTracks);
-            for (let i = 0; i < calmTracks.length; i++){
-                audioControls.src = 'media/calm/' + calmTracks[i];
-                trackHolder = utils.songTracker(calmTracks[i], songTitle);
-                if (trackCB.checked){
-                    trackName.innerHTML = trackHolder;
-                }
+            
+            audioControls.src = 'media/calm/' + calmTracks[indexNum];
+            trackHolder = utils.songTracker(calmTracks[indexNum], songTitle);
+            if (trackCB.checked){
+                trackName.innerHTML = trackHolder;
             }
         }
         if (e.target.value == 'vibe'){
+            
             vibeTracks = utils.shuffle(vibeTracks);
-            for (let i = 0; i < calmTracks.length; i++){
-                audioControls.src = 'media/vibe/' + vibeTracks[i];
-                trackHolder = utils.songTracker(vibeTracks[i], songTitle);
-                if (trackCB.checked){
-                    trackName.innerHTML = trackHolder;
-                }
+
+            audioControls.src = 'media/vibe/' + vibeTracks[indexNum];
+            trackHolder = utils.songTracker(vibeTracks[indexNum], songTitle);
+            if (trackCB.checked){
+                trackName.innerHTML = trackHolder;
             }
         }
         if (e.target.value == 'sad'){
+            
             sadTracks = utils.shuffle(sadTracks);
-            for (let i = 0; i < calmTracks.length; i++){
-                audioControls.src = 'media/sad/' + sadTracks[i];
-                trackHolder = utils.songTracker(sadTracks[i], songTitle);
-                if (trackCB.checked){
-                    trackName.innerHTML = trackHolder;
-                }
+
+            audioControls.src = 'media/sad/' + sadTracks[indexNum];
+            trackHolder = utils.songTracker(sadTracks[indexNum], songTitle);
+            if (trackCB.checked){
+                trackName.innerHTML = trackHolder;
             }
         }
+        audioControls.play();
     };
     
     let circleRB = document.querySelector('#showCircle');
@@ -188,6 +233,17 @@ function setupUI(canvasElement){
         }
     };
     
+    let logCB = document.querySelector('#logCB');
+    // add .onchange event to <select>
+    logCB.onchange = e => {
+        if (logCB.checked){
+            drawParams.showLog = true;
+        }
+        else{
+            drawParams.showLog = false;
+        }
+    };
+    
     if (trackCB.checked){
         trackName.innerHTML = trackHolder;
     }
@@ -202,34 +258,29 @@ function setupUI(canvasElement){
         }
     };
     
-    let noiseCB = document.querySelector('#noiseCB');
-    // add .onchange event to <select>
-    noiseCB.onchange = e => {
-        if (noiseCB.checked){
-            drawParams.showNoise = true;
-        }
-        else{
-            drawParams.showNoise = false;
-        }
-    };
-    
     let redSlider = document.querySelector('#redSlider');
     
-    redSlider.onchange = e => {
-        drawParams.redValue = e.value;
+    redSlider.oninput = e => {
+        drawParams.redValue = e.target.value;
     };
     
     let greenSlider = document.querySelector('#greenSlider');
     
     greenSlider.oninput = e => {
-        drawParams.greenValue = e.value;
+        drawParams.greenValue = e.target.value;
     };
     
     let blueSlider = document.querySelector('#blueSlider');
     
     blueSlider.oninput = e => {
-        drawParams.blueValue = e.value;
+        drawParams.blueValue = e.target.value;
     };
+    
+    let bassSlider = document.querySelector('#bassSlider');
+    
+    bassSlider.oninput = e => {
+        audio.biquadNode.gain.value = e.target.value;
+    }
     
 } // end setupUI
 

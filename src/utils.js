@@ -59,7 +59,7 @@ const songTracker= (song, titles={}) =>{
     if (song == 'escape - Imaginary Labyrinth - 04 Ikelos.mp3'){
         return titles.ikelos;
     }
-    if (song == 'scape - Imaginary Labyrinth - 05 Gaea.mp3'){
+    if (song == 'escape - Imaginary Labyrinth - 05 Gaea.mp3'){
         return titles.gaea;
     }
     if (song == 'escape - Imaginary Labyrinth - 06 Lethe.mp3'){
@@ -76,4 +76,13 @@ const songTracker= (song, titles={}) =>{
     }
 }
 
-export {makeColor, getRandomColor, getLinearGradient, goFullscreen, shuffle, songTracker};
+const degToRad = (deg) =>{
+  return deg * Math.PI / 180;
+}
+
+const toLog = (value, min, max) =>{
+    let exp = (value-min) / (max-min);
+    return min * Math.pow(max/min, exp);
+}
+
+export {makeColor, getRandomColor, getLinearGradient, goFullscreen, shuffle, songTracker, degToRad, toLog};

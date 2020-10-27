@@ -10,11 +10,12 @@
 <main>
     <h1>Audio Visualizer Project</h1>
 	<canvas width="800" height="600"></canvas>
-	<div id="controls">
-		<section>
+	<div class="flex-container" id="controls">
+		<section class="flex-container" id="mainInput">
 		    <audio controls src="" allow="autoplay"></audio>
 			<button id="fsButton">Full Screen</button>
-		
+        </section>
+        <section class="flex-container" id="mood">
 			<label>Mood: 
 				<select id="moodSelect">
 					<option value="calm" selected>Calm</option>
@@ -23,25 +24,32 @@
 				</select>
 			</label>
 		</section>
-		<section>
+		<section class="flex-container" id="radio">
           <span><input type="radio" id="showCircle" name="visualization" value="circle" checked><label for="showCircle">Circle</label></span>
           <span><input type="radio" id="showSnowflake" name="visualization" value="snowflake"><label for="showSnowflake">Snowflake</label></span>
           <span><input type="radio" id="showBar" name="visualization" value="bar"><label for="showBar">Bar</label></span>
+        </section>
+        <section class="flex-container" id="checkbox">
           <span><input type="checkbox" id="waveformCB" checked><label for="waveformCB" >Show Waveform</label></span>
-          <span><input type="checkbox" id="noiseCB"><label for="noiseCB">Show Noise</label></span>
+          <span><input type="checkbox" id="logCB"><label for="logCB" >Logarithmic Analyser</label></span>
         </section>
         
-        <section>
+        <section class="flex-container" id="track">
             <span><input type="checkbox" id="trackCB" checked><label for="trackCB">Show Track</label></span>
             <div id='trackName'>---</div>
         </section>
         
-        <section>
+        <section class="flex-container" id='colors'>
             <span><input type="range" min='0' max='255' value='10' class='slider' id='redSlider'><label for='redSlider'>Red</label></span>
             <span><input type="range" min='0' max='255' value='200' class='slider' id='greenSlider'><label for='greenSlider'>Green</label></span>
             <span><input type="range" min='0' max='255' value='60' class='slider' id='blueSlider'><label for='blueSlider'>Blue</label></span>
         </section>
+        <section class="flex-container" id='bass'>
+            <span><input type="range" min='0' max='30' value='0' class='slider' id='bassSlider'></span>
+            <span><p id='bassText'>Bass</p></span>
+        </section>
 	</div>
 </main>
 </body>
+<link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
 </html>

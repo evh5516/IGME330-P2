@@ -40,7 +40,7 @@ function draw(params={}){
 	
 	// 2 - draw background
     ctx.save();
-    ctx.fillStyle = 'grey';
+    ctx.fillStyle = '#1e1e1e';
     ctx.globalAlpha = 0.4;
     ctx.fillRect(0,0,canvasWidth,canvasHeight);
     ctx.restore();
@@ -62,6 +62,7 @@ function draw(params={}){
         let centerX = canvasWidth/2;
         let centerY = canvasHeight/2;
         let frequencyArray = new Uint8Array(analyserNode.frequencyBinCount);
+        let audioArray = [];
         
         ctx.save();
         ctx.globalAlpha = 0.4;
@@ -74,16 +75,31 @@ function draw(params={}){
         
         for(let i = 0; i < bars; i++){
             let rads = Math.PI * 2 / bars;
-            let barHeight = audioData[i]*(1.2);
             let barWidth = 2;
             
+            if (params.showLog){ // Grabbed from https://stackoverflow.com/questions/35799286/get-logarithmic-bytefrequencydata-from-audio
+                let logIndex = utils.toLog(i+1, 1, bars+1); // range of 1 -> bars
+                // interpolate value
+                let low = Math.floor(logIndex);
+                let high = Math.ceil(logIndex);
+                let lv = audioData[low];
+                let hv = audioData[high];
+                let w = (logIndex-low)/(high-low);
+                let v = lv + (hv-lv)*w; // interpolated value of the original array
+
+                audioArray[i] = v;
+            }
+            else{
+                audioArray[i] = audioData[i];
+            }
+            let barHeight = audioData[i]*(1.2);
             let x = centerX; //+ Math.cos(rads * spacingNumber) * (radius);
             let y = centerY + Math.sin(rads * spacingNumber) * (radius);
             //let xEnd = centerX + Math.cos(rads * i) * (radius + barHeight);
             //let yEnd = centerY + Math.sin(rads * i) * (radius + barHeight);
             
             //let lineColor = "rgb(" + frequency + ", " + frequency +", "+205+")";
-            drawBar(x, y, barWidth, barHeight, i*spacingNumber, frequencyArray[i]);
+            drawBar(x, y, barWidth, barHeight, i*spacingNumber, params.redValue, params.greenValue, params.blueValue);
             
             //console.log(audio.frequencyArray);
         }
@@ -97,6 +113,7 @@ function draw(params={}){
         let centerX = canvasWidth/2;
         let centerY = canvasHeight/2;
         let frequencyArray = new Uint8Array(analyserNode.frequencyBinCount);
+        let audioArray = [];
         
         ctx.save();
         ctx.globalAlpha = 0.4;
@@ -109,18 +126,28 @@ function draw(params={}){
         
         for(let i = 0; i < bars; i++){
             let rads = Math.PI * 2 / bars;
-            let barHeight = audioData[i]*(0.7);
             let barWidth = 2;
             
-            let x = centerX + Math.cos(degToRad(i*spacingNumber)) * radius;
-            let y = centerY + Math.sin(degToRad(i*spacingNumber)) * radius;
-            //let xEnd = centerX + Math.cos(rads * i) * (radius + barHeight);
-            //let yEnd = centerY + Math.sin(rads * i) * (radius + barHeight);
+            if (params.showLog){ // Grabbed from https://stackoverflow.com/questions/35799286/get-logarithmic-bytefrequencydata-from-audio
+                let logIndex = utils.toLog(i+1, 1, bars+1); // range of 1 -> bars
+                // interpolate value
+                let low = Math.floor(logIndex);
+                let high = Math.ceil(logIndex);
+                let lv = audioData[low];
+                let hv = audioData[high];
+                let w = (logIndex-low)/(high-low);
+                let v = lv + (hv-lv)*w; // interpolated value of the original array
+
+                audioArray[i] = v;
+            }
+            else{
+                audioArray[i] = audioData[i];
+            }
+            let barHeight = audioData[i]*(0.7);
+            let x = centerX + Math.cos(utils.degToRad(i*spacingNumber)) * radius;
+            let y = centerY + Math.sin(utils.degToRad(i*spacingNumber)) * radius;
             
-            //let lineColor = "rgb(" + frequency + ", " + frequency +", "+205+")";
-            drawBar(x, y, barWidth, barHeight, i*spacingNumber, frequencyArray[i]);
-            
-            //console.log(audio.frequencyArray);
+            drawBar(x, y, barWidth, barHeight, i*spacingNumber, params.redValue, params.greenValue, params.blueValue);
         }
         ctx.restore();
     }
@@ -134,6 +161,7 @@ function draw(params={}){
         let barHeight = 200;
         let topSpacing = (canvasHeight/2) - (barHeight);
         let frequencyArray = new Uint8Array(analyserNode.frequencyBinCount);
+        let audioArray = [];
         
         analyserNode.getByteFrequencyData(frequencyArray);
         
@@ -148,94 +176,31 @@ function draw(params={}){
         
         // loop through the data and draw!
         for(let i = 0; i < bars; i++){
-            //ctx.fillStyle = "rgb(" + frequencyArray[i] + ", " + frequencyArray[i] +", "+205+")";
-            //ctx.strokeStyle = "rgb(" + frequencyArray[i] + ", " + frequencyArray[i] +", "+205+")";
+            
+            if (params.showLog){ // Grabbed from https://stackoverflow.com/questions/35799286/get-logarithmic-bytefrequencydata-from-audio
+                let logIndex = utils.toLog(i+1, 1, bars+1); // range of 1 -> bars
+                // interpolate value
+                let low = Math.floor(logIndex);
+                let high = Math.ceil(logIndex);
+                let lv = audioData[low];
+                let hv = audioData[high];
+                let w = (logIndex-low)/(high-low);
+                let v = lv + (hv-lv)*w; // interpolated value of the original array
+
+                audioArray[i] = v;
+            }
+            else{
+                audioArray[i] = audioData[i];
+            }
             ctx.fillStyle = "rgb(" + params.redValue + ", " + params.greenValue +", "+ params.blueValue +")";
             ctx.strokeStyle = "rgb(" + params.redValue + ", " + params.greenValue +", "+params.blueValue +")";
-            ctx.fillRect(margin + i * (barWidth + barSpacing), topSpacing + 256-audioData[i], barWidth, barHeight);
-            ctx.strokeRect(margin + i * (barWidth + barSpacing), topSpacing + 256-audioData[i], barWidth, barHeight);
+            ctx.fillRect(margin + i * (barWidth + barSpacing), topSpacing + 256-audioArray[i], barWidth, barHeight);
+            ctx.strokeRect(margin + i * (barWidth + barSpacing), topSpacing + 256-audioArray[i], barWidth, barHeight);
         }
         ctx.restore();
     }
     
-    /*
-	// 5 - draw circles
-    if(params.showCircles){
-        let maxRadius = canvasHeight/3;
-        ctx.save();
-        ctx.globalAlpha = 0.5;
-        for(let i = 0; i < audioData.length; i++){
-            // red-ish circles
-            let percent = audioData[i] / 255;
-            
-            let circleRadius = percent * maxRadius;
-            
-            if (params.moodType == 'calm'){
-                ctx.beginPath();
-                ctx.fillStyle = utils.makeColor(51, 82, 186, 0.34 - percent/3.0);
-                ctx.arc(canvasWidth/2, canvasHeight/2, circleRadius * 1.25, 0, 2 * Math.PI, false);
-                ctx.fill();
-                ctx.closePath();
-
-                // blue-ish circles
-                ctx.beginPath();
-                ctx.fillStyle = utils.makeColor(150, 135, 190, 0.10 - percent/10.0);
-                ctx.arc(canvasWidth/2, canvasHeight/2, circleRadius, 0, 2 * Math.PI, false);
-                ctx.fill();
-                ctx.closePath();
-
-                // yellow-ish circles
-                ctx.beginPath();
-                ctx.fillStyle = utils.makeColor(199, 110, 149, 0.5 - percent/5.0);
-                ctx.arc(canvasWidth/2, canvasHeight/2, circleRadius * 0.75, 0, 2 * Math.PI, false);
-                ctx.fill();
-                ctx.closePath();
-            }
-            if (params.moodType == 'vibe'){
-                ctx.beginPath();
-                ctx.fillStyle = utils.makeColor(0, 111, 111, 0.34 - percent/3.0);
-                ctx.arc(canvasWidth/2, canvasHeight/2, circleRadius * 1.25, 0, 2 * Math.PI, false);
-                ctx.fill();
-                ctx.closePath();
-
-                // blue-ish circles
-                ctx.beginPath();
-                ctx.fillStyle = utils.makeColor(243, 191, 179, 0.10 - percent/10.0);
-                ctx.arc(canvasWidth/2, canvasHeight/2, circleRadius, 0, 2 * Math.PI, false);
-                ctx.fill();
-                ctx.closePath();
-
-                // yellow-ish circles
-                ctx.beginPath();
-                ctx.fillStyle = utils.makeColor(203, 225, 239, 0.5 - percent/5.0);
-                ctx.arc(canvasWidth/2, canvasHeight/2, circleRadius * 0.75, 0, 2 * Math.PI, false);
-                ctx.fill();
-                ctx.closePath();
-            }
-            if (params.moodType == 'sad'){
-                ctx.beginPath();
-                ctx.fillStyle = utils.makeColor(255, 111, 111, 0.34 - percent/3.0);
-                ctx.arc(canvasWidth/2, canvasHeight/2, circleRadius * 1.25, 0, 2 * Math.PI, false);
-                ctx.fill();
-                ctx.closePath();
-
-                // blue-ish circles
-                ctx.beginPath();
-                ctx.fillStyle = utils.makeColor(0, 0, 255, 0.10 - percent/10.0);
-                ctx.arc(canvasWidth/2, canvasHeight/2, circleRadius, 0, 2 * Math.PI, false);
-                ctx.fill();
-                ctx.closePath();
-
-                // yellow-ish circles
-                ctx.beginPath();
-                ctx.fillStyle = utils.makeColor(200, 200, 0, 0.5 - percent/5.0);
-                ctx.arc(canvasWidth/2, canvasHeight/2, circleRadius * 0.75, 0, 2 * Math.PI, false);
-                ctx.fill();
-                ctx.closePath();
-            }
-        }
-        ctx.restore();
-    }*/
+    
     // 6 - bitmap manipulation
 	// TODO: right now. we are looping though every pixel of the canvas (320,000 of them!), 
 	// regardless of whether or not we are applying a pixel effect
@@ -253,28 +218,13 @@ function draw(params={}){
         
     analyserNode.getByteFrequencyData(frequencyArray);
 	// B) Iterate through each pixel, stepping 4 elements at a time (which is the RGBA for 1 pixel)
-    for (let i = 0; i < length; i+=10){
-		// C) randomly change every 20th pixel
-	   if (params.showNoise && Math.random() < .05){
-			// data[i] is the red channel
-			// data[i+1] is the green channel
-			// data[i+2] is the blue channel
-			// data[i+3] is the alpha channel
-          
-            data[i] = data[i+1] = data[i+2] = 0; // zero out the red and green and blue channels
-            data[i+1] = 150; 
-            data[i+2] = 220;
-           
-		} // end if
-        
-	} // end for
 	
 	// D) copy image data back to canvas
     ctx.putImageData(imageData, 0, 0);
 }
 
-function drawBar(x, y, w, h, rads, frequency){
-    let lineColor = "rgb(" + frequency/2 + ", " + frequency*2 +", "+ frequency +")";
+function drawBar(x, y, w, h, rads, red, green, blue){
+    let lineColor = "rgb(" + red + ", " + green +", "+ blue +")";
     /*
     ctx.save();
     ctx.strokeStyle = 'red';
@@ -287,15 +237,13 @@ function drawBar(x, y, w, h, rads, frequency){
     
     ctx.save();
     ctx.translate(x, y);
-    ctx.rotate(degToRad(rads+90));
+    ctx.rotate(utils.degToRad(rads+90));
     ctx.fillStyle = lineColor;
     ctx.fillRect(-1*(w), -1*(h), w, h);
     ctx.restore();
     
 }
 
-function degToRad(deg){
-  return deg * Math.PI / 180;
-}
+
 
 export {setupCanvas,draw};
